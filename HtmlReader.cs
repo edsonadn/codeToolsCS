@@ -1,8 +1,8 @@
-class ListHtml
+public class ListHtml
     {
         public readonly List<Parameter> parameters = new List<Parameter>();
         public readonly List<ListHtml> children = new List<ListHtml>();
-        public string nameTag { get; }
+        public string nameTag { get; set; }
         public string valueAfter { get; set; }
         public string valueBefore { get; set; }
         public ListHtml(string path, string _nameTag)
@@ -17,6 +17,11 @@ class ListHtml
             {
                 htmlList.Add(val.Split('>'));
             });
+            GenerateInitialLimits(htmlList);
+        }
+        public ListHtml(List<string[]> htmlList, string _nameTag)
+        {
+            nameTag = _nameTag;
             GenerateInitialLimits(htmlList);
         }
         private void GenerateInitialLimits(List<string[]> htmlList)
@@ -104,9 +109,9 @@ class ListHtml
                     break;
                 }
             }
-            if(range.Breaker1 != -1)
+            if (range.Breaker1 != -1)
             {
-                    int countTag = 0;
+                int countTag = 0;
                 for (int i = range.Breaker1; i < list.Count; i++)
                 {
                     result.Add(list[i]);
@@ -119,7 +124,7 @@ class ListHtml
                         range.Breaker2 = i;
                         break;
                     }
-                    else if(list[i][0].StartsWith("/" + tagHtml))
+                    else if (list[i][0].StartsWith("/" + tagHtml))
                     {
                         countTag--;
                     }
@@ -132,7 +137,7 @@ class ListHtml
                 return range;
             }
             return new RangeAndList();
-            
+
         }
         private void GetChildren(List<string[]> sublist)
         {
@@ -140,7 +145,7 @@ class ListHtml
             {
                 if (comprobeTag(sublist[i][0].Split(' ')[0]))
                 {
-                    i += CreateChildren(DetectRang(sublist, sublist[i][0].Split(' ')[0],i));
+                    i += CreateChildren(DetectRang(sublist, sublist[i][0].Split(' ')[0], i));
                 }
                 else
                 {
